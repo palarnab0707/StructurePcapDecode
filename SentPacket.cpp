@@ -59,7 +59,10 @@ int main()
         int server,port2,n,n1;
         socklen_t len;
         string str;
-        ifstream File("input.txt");
+        string file1;
+        cout<<"Enter the input file:"<<endl;
+        cin>>file1;
+        ifstream File(file1.c_str());
         char *send;
         cout<<"Enter the port"<<endl;
         cin>>port2;
