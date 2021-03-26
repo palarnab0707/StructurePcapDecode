@@ -37,7 +37,13 @@ int main()
 {
     struct ORDER_MESSAGE M;
     struct TRADE_MESSAGE T;
-    string file = "t.pcap";
+    string file;
+    string out;
+    cout<<"Enter the pcap file:"<<endl;
+    cin>>file;
+    cout<<"Enter the output file:"<<endl;
+    cin>>out;
+    ofstream f(out.c_str());
     int hdrlen=42;
     char str;
     char errbuff[PCAP_ERRBUF_SIZE];
@@ -50,24 +56,24 @@ int main()
         printf("Packet # %i\n", ++packetCount);
         printf("Packet size: %d bytes\n", header->len);
         memcpy(&str,data+hdrlen+sizeof(STREAM_HEADER), sizeof(char));
-        cout<<str<<endl;
+        //cout<<str<<endl;
         if(str=='M' || str=='N' || str=='X')
         {
                 memcpy(&M,data+hdrlen ,sizeof(M));
-                cout<<"Order"<<endl;
-                cout<<"Stream Header"<<endl;
-                cout<<M.GHeader.msg_len<<" "<<M.GHeader.stream_id<<" "<<M.GHeader.seq_no<<endl;
-                cout<<"Order Message"<<endl;
-                cout<<M.MsgType<<" "<<M.TimeStamp<<" "<<M.OrderId<<" "<<M.Token<<" "<<M.OrderType<<" "<<M.Price<<" "<<M.Quantity<<endl;
+                f<<"Order\n";
+                f<<"Stream Header\n";
+                f<<M.GHeader.msg_len<<" "<<M.GHeader.stream_id<<" "<<M.GHeader.seq_no<<"\n";
+                f<<"Order Message"<<"\n";
+                f<<M.MsgType<<" "<<M.TimeStamp<<" "<<M.OrderId<<" "<<M.Token<<" "<<M.OrderType<<" "<<M.Price<<" "<<M.Quantity<<"\n";
         }
         if(str=='T')
         {
                 memcpy(&T,data+hdrlen,sizeof(T));
-                cout<<"Trade"<<endl;
-                cout<<"Stream Header"<<endl;
-                cout<<T.GHeader.msg_len<<" "<<T.GHeader.stream_id<<" "<<T.GHeader.seq_no<<endl;
-                cout<<"Trade Message"<<endl;
-                cout<<T.MsgType<<" "<<T.TimeStamp<<" "<<T.BuyOrderId<<" "<<T.SellOrderId<<" "<<T.token<<" "<<T.TradePrice<<" "<<T.TradeQuantity<<endl;
+                f<<"Trade\n";
+                f<<"Stream Header\n";
+                f<<T.GHeader.msg_len<<" "<<T.GHeader.stream_id<<" "<<T.GHeader.seq_no<<"\n";
+                f<<"Trade Message\n";
+                f<<T.MsgType<<" "<<T.TimeStamp<<" "<<T.BuyOrderId<<" "<<T.SellOrderId<<" "<<T.token<<" "<<T.TradePrice<<" "<<T.TradeQuantity<<"\n";
          }
     }
 }
